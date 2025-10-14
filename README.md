@@ -1,0 +1,162 @@
+# markdown-pdf.el
+
+An Emacs package that provides pretty markdown to PDF export functionality, inspired by the VSCode "Markdown PDF" extension.
+
+## Features
+
+- Export markdown files to beautifully formatted PDFs
+- Built-in CSS styling similar to VSCode's markdown preview
+- Support for custom CSS files
+- Automatic PDF opening after export
+- Configurable output directories
+- Supports multiple PDF engines (weasyprint, pdflatex, xelatex)
+- Includes header with filename and date
+- Clean, professional styling with proper margins and typography
+
+## Requirements
+
+- Emacs 25.1 or later
+- [Pandoc](https://pandoc.org/) (required for PDF conversion)
+- One of the following PDF engines (optional, but recommended for better output):
+  - [WeasyPrint](https://weasyprint.org/) (recommended)
+  - pdflatex (from TeX Live)
+  - xelatex (from TeX Live)
+
+## Installation
+
+### Manual Installation
+
+1. Download `markdown-pdf.el` and place it in your Emacs load path
+2. Add the following to your Emacs configuration:
+
+```elisp
+(require 'markdown-pdf)
+```
+
+### Using use-package
+
+```elisp
+(use-package markdown-pdf
+  :load-path "/path/to/markdown-pdf")
+```
+
+## Usage
+
+### Interactive Commands
+
+- `M-x markdown-pdf-export` - Export current markdown buffer to PDF
+- `M-x markdown-pdf-export-and-open` - Export and open the PDF file
+- `C-c ,` (in markdown-mode) - Export and open PDF (default keybinding)
+
+### Basic Workflow
+
+1. Open a markdown file in Emacs
+2. Press `C-c ,` or run `M-x markdown-pdf-export-and-open`
+3. The PDF will be generated and opened automatically
+
+## Configuration
+
+### Customization Variables
+
+```elisp
+;; Pandoc command (default: "pandoc")
+(setq markdown-pdf-pandoc-command "pandoc")
+
+;; Custom CSS file (default: nil, uses built-in CSS)
+(setq markdown-pdf-css-file "/path/to/your/custom.css")
+
+;; Open PDF after export (default: t)
+(setq markdown-pdf-open-after-export t)
+
+;; Output directory (default: nil, saves in same directory as markdown file)
+(setq markdown-pdf-output-directory "~/Documents/PDFs/")
+```
+
+### Example Configuration
+
+```elisp
+(use-package markdown-pdf
+  :load-path "/path/to/markdown-pdf"
+  :config
+  (setq markdown-pdf-open-after-export t
+        markdown-pdf-output-directory "~/Documents/exported-pdfs/")
+  ;; Optional: change the keybinding
+  (define-key markdown-mode-map (kbd "C-c C-e") 'markdown-pdf-export-and-open))
+```
+
+## Custom CSS
+
+You can provide your own CSS file for custom styling:
+
+```elisp
+(setq markdown-pdf-css-file "~/my-markdown-styles.css")
+```
+
+The package includes a default CSS that provides:
+- Clean, readable typography using system fonts
+- Proper heading hierarchy and spacing
+- Styled code blocks and inline code
+- Professional table formatting
+- Blockquote styling
+- Responsive images
+
+## PDF Engines
+
+The package automatically detects and uses available PDF engines in this order:
+1. **WeasyPrint** (recommended for best results)
+2. **pdflatex**
+3. **xelatex**
+
+Install WeasyPrint for the best output quality:
+
+```bash
+# On macOS with Homebrew
+brew install weasyprint
+
+# On Ubuntu/Debian
+sudo apt-get install weasyprint
+
+# Using pip
+pip install weasyprint
+```
+
+## Output Features
+
+Generated PDFs include:
+- Header with filename and export date
+- Professional margins and spacing
+- High-quality typography
+- Proper page breaks
+- Syntax highlighting for code blocks
+- Responsive images that fit page width
+
+## Troubleshooting
+
+### Pandoc not found
+Ensure Pandoc is installed and in your PATH:
+```bash
+pandoc --version
+```
+
+### Poor PDF quality
+Install WeasyPrint for better output:
+```bash
+pip install weasyprint
+```
+
+### Permission errors
+Ensure the output directory is writable, or leave `markdown-pdf-output-directory` as `nil` to save in the same directory as the source file.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## License
+
+This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Inspired by the VSCode "Markdown PDF" extension
+- Built on top of the excellent [Pandoc](https://pandoc.org/) document converter
+- Default CSS styling adapted from VSCode's markdown preview# markdown-pdf

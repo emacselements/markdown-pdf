@@ -116,6 +116,9 @@ Thumbs.db
 # Development notes
 claude.md
 
+# History files (VS Code extension)
+.history/
+
 # MELPA build artifacts
 *-pkg.el
 *-autoloads.el

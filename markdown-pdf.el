@@ -1,6 +1,6 @@
 ;;; markdown-pdf.el --- Pretty markdown to PDF export for Emacs
 
-;; Author: Raoul Comninos
+;; Author: Rari Comninos
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: markdown, pdf, export

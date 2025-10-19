@@ -1,6 +1,6 @@
 ;;; markdown-pdf.el --- Pretty markdown to PDF export for Emacs
 
-;; Author: Raoul Comninos
+;; Author: Your Name
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: markdown, pdf, export
@@ -125,6 +125,7 @@ Common options:
       (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" t pandoc-args)))
     (when temp-css-p (delete-file css-file))
     (when temp-html (delete-file temp-html))
+    (when temp-input-p (delete-file input-file))
     (if (= result 0)
         (progn
           (message "PDF exported successfully: %s" output-file)

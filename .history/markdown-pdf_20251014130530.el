@@ -1,6 +1,6 @@
 ;;; markdown-pdf.el --- Pretty markdown to PDF export for Emacs
 
-;; Author: Raoul Comninos
+;; Author: Your Name
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: markdown, pdf, export
@@ -94,15 +94,24 @@ Common options:
   (unless (markdown-pdf--pandoc-available-p)
     (error "Pandoc is not available"))
   (let ((input-file (buffer-file-name))
-        output-file css-file temp-css-p temp-html result)
+        (original-input-file (buffer-file-name))
+        output-file css-file temp-css-p temp-html temp-input-p result)
     (unless input-file
       (error "Buffer is not visiting a file"))
-    (setq output-file (markdown-pdf--get-output-path input-file))
+    (setq output-file (markdown-pdf--get-output-path original-input-file))
     (setq css-file (markdown-pdf--get-css-file))
     (setq temp-css-p (not markdown-pdf-css-file))
     (when (buffer-modified-p)
       (when (y-or-n-p "Save buffer? ")
         (save-buffer)))
+    ;; Preprocess buffer if needed, save to temporary file
+    (when markdown-pdf-convert-slash-emphasis
+      (let ((temp-input-file (make-temp-file "markdown-pdf-input" nil ".md")))
+        (setq temp-input-p t)
+        (with-temp-file temp-input-file
+          (insert-buffer-substring (current-buffer))
+          (markdown-pdf--preprocess-buffer))
+        (setq input-file temp-input-file)))
     (message "Exporting markdown to PDF...")
     (let ((output-dir (file-name-directory output-file)))
       (unless (file-directory-p output-dir)
@@ -125,6 +134,7 @@ Common options:
       (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" t pandoc-args)))
     (when temp-css-p (delete-file css-file))
     (when temp-html (delete-file temp-html))
+    (when temp-input-p (delete-file input-file))
     (if (= result 0)
         (progn
           (message "PDF exported successfully: %s" output-file)

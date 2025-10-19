@@ -1,6 +1,6 @@
 ;;; markdown-pdf.el --- Pretty markdown to PDF export for Emacs
 
-;; Author: Raoul Comninos
+;; Author: Your Name
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "25.1"))
 ;; Keywords: markdown, pdf, export
@@ -25,16 +25,6 @@
 (defcustom markdown-pdf-css-file nil
   "Path to custom CSS file for styling the PDF output."
   :type '(choice (const nil) file)
-  :group 'markdown-pdf)
-
-(defcustom markdown-pdf-markdown-format "markdown+smart"
-  "Pandoc markdown format to use for parsing.
-Common options:
-- markdown+smart (default, smart quotes and typography)
-- gfm (GitHub Flavored Markdown)
-- markdown_strict (strict markdown)
-- markdown+all_symbols_escapable (allows escaping any symbol)"
-  :type 'string
   :group 'markdown-pdf)
 
 (defcustom markdown-pdf-open-after-export t
@@ -115,14 +105,14 @@ Common options:
     (let* ((pdf-engines '("weasyprint" "pdflatex" "xelatex"))
            (available-engine (markdown-pdf--find-available-engine pdf-engines))
            (pandoc-args (append
-                        (list "-f" markdown-pdf-markdown-format input-file "-o" output-file "--css" css-file "--embed-resources" "--standalone")
+                        (list "-f" "markdown+smart" input-file "-o" output-file "--css" css-file "--self-contained")
                         (when available-engine (list "--pdf-engine" available-engine))
                         (list "--metadata" "margin-top=0.5in"
                               "--metadata" "margin-bottom=0.1in"
                               "--metadata" "margin-left=0.1in"
                               "--metadata" "margin-right=0.1in"
                               "--include-before-body" temp-html))))
-      (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" t pandoc-args)))
+      (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" nil pandoc-args)))
     (when temp-css-p (delete-file css-file))
     (when temp-html (delete-file temp-html))
     (if (= result 0)
@@ -130,12 +120,7 @@ Common options:
           (message "PDF exported successfully: %s" output-file)
           (when markdown-pdf-open-after-export
             (markdown-pdf--open-pdf output-file)))
-      (let ((error-output (when (get-buffer "*pandoc-output*")
-                            (with-current-buffer "*pandoc-output*"
-                              (buffer-string)))))
-        (error "Pandoc export failed with exit code %d%s" 
-               result 
-               (if error-output (format "\nOutput: %s" error-output) ""))))))
+      (error "Pandoc export failed with exit code %d" result))))
 
 ;;;###autoload
 (defun markdown-pdf-export-and-open ()

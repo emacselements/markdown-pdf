@@ -48,7 +48,7 @@ Common options:
   :group 'markdown-pdf)
 
 (defvar markdown-pdf-default-css
-  "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe WPC','Segoe UI',sans-serif;font-size:14px;line-height:22px;padding:5px;margin:0;color:rgb(34,34,34);background:white;font-weight:500}h1,h2,h3,h4,h5,h6{font-weight:normal;margin-top:24px;margin-bottom:16px;line-height:1.25;color:rgb(34,34,34)}h1{font-size:2em;margin-top:0;padding-bottom:0.3em;border-bottom:1px solid rgb(34,34,34)}h2{font-size:1.5em}h3{font-size:1.25em}h4{font-size:1em}h5{font-size:0.875em}h6{font-size:0.85em}p{margin-top:0;margin-bottom:16px}li p{margin-bottom:0.7em}a{text-decoration:none}a:hover{text-decoration:underline}ul,ol{margin-bottom:0.7em}code{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:1em}:not(pre):not(.hljs)>code{color:rgb(201,174,117)}pre{background-color:rgb(248,248,248);border:1px solid rgb(204,204,204);border-radius:3px;padding:16px;margin-bottom:0.7em}blockquote{margin:0;padding:0 16px 0 10px;border-left:5px solid rgba(0,122,204,0.5);background:rgba(127,127,127,0.1)}table{border-collapse:collapse;margin-bottom:0.7em}th{text-align:left;border-bottom:1px solid rgba(0,0,0,0.69);padding:5px 10px}td{padding:5px 10px}hr{border:0;height:1px;border-bottom:1px solid rgba(0,0,0,0.18)}img{max-width:100%}.page{page-break-after:always}"
+  "body{font-family:-apple-system,BlinkMacSystemFont,'Segoe WPC','Segoe UI',sans-serif;font-size:14px;line-height:20px;padding:5px;margin:0;color:rgb(34,34,34);background:white;font-weight:500}h1,h2,h3,h4,h5,h6{font-weight:normal;margin-top:20px;margin-bottom:12px;line-height:1.25;color:rgb(34,34,34);page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;break-after:avoid}h1{font-size:2em;margin-top:0;padding-bottom:0.3em;border-bottom:1px solid rgb(34,34,34)}h2{font-size:1.5em}h3{font-size:1.25em}h4{font-size:1em}h5{font-size:0.875em}h6{font-size:0.85em}p{margin-top:0;margin-bottom:12px;page-break-inside:avoid;break-inside:avoid}li{page-break-inside:avoid;break-inside:avoid}li p{margin-bottom:0.5em}a{text-decoration:none}a:hover{text-decoration:underline}ul,ol{margin-bottom:0.5em;page-break-inside:avoid;break-inside:avoid}code{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:1em}:not(pre):not(.hljs)>code{color:rgb(201,174,117)}pre{background-color:rgb(248,248,248);border:1px solid rgb(204,204,204);border-radius:3px;padding:16px;margin-bottom:0.5em;page-break-inside:avoid;break-inside:avoid}blockquote{margin:0;padding:0 16px 0 10px;border-left:5px solid rgba(0,122,204,0.5);background:rgba(127,127,127,0.1);page-break-inside:avoid;break-inside:avoid}table{border-collapse:collapse;margin-bottom:0.5em;page-break-inside:avoid;break-inside:avoid}th{text-align:left;border-bottom:1px solid rgba(0,0,0,0.69);padding:5px 10px}td{padding:5px 10px}hr{border:0;height:1px;border-bottom:1px solid rgba(0,0,0,0.18)}img{max-width:100%}.page{page-break-after:always}div[style*='page-break-inside']{page-break-inside:avoid;break-inside:avoid}@page{orphans:4;widows:4}"
   "Default CSS styling for markdown PDF export.")
 
 (defun markdown-pdf--get-css-file ()
@@ -87,6 +87,51 @@ Common options:
    ((eq system-type 'windows-nt) (w32-shell-execute "open" pdf-file))
    (t (message "Cannot open PDF automatically"))))
 
+(defun markdown-pdf--preprocess-for-export (input-file)
+  "Preprocess INPUT-FILE to wrap list items in divs to prevent orphans.
+Returns path to preprocessed temporary file."
+  (let ((temp-file (make-temp-file "markdown-pdf-prep" nil ".md"))
+        (in-yaml nil))
+    (with-temp-file temp-file
+      (insert-file-contents input-file)
+      (goto-char (point-min))
+      ;; Skip YAML front matter if present
+      (when (looking-at "^---[ \t]*$")
+        (forward-line 1)
+        (while (and (not (eobp))
+                    (not (looking-at "^---[ \t]*$")))
+          (forward-line 1))
+        (when (looking-at "^---[ \t]*$")
+          (forward-line 1)))
+      ;; Find list items with bold text and wrap with divs
+      (while (re-search-forward "^[-*+] \\*\\*" nil t)
+        (beginning-of-line)
+        ;; Check if already wrapped
+        (unless (save-excursion
+                  (forward-line -1)
+                  (looking-at "^<div"))
+          (let ((list-start (point)))
+            ;; Find end of this list item's content
+            (forward-line 1)
+            (while (and (not (eobp))
+                        (not (looking-at "^[-*+]\\|^---\\|^#")))
+              (forward-line 1))
+            ;; Include separator if present but not YAML separator
+            (when (and (looking-at "^---")
+                       (save-excursion
+                         (forward-line 1)
+                         (not (looking-at "^$\\|^[-*+]\\|^#"))))
+              (forward-line 1))
+            (let ((list-end (point)))
+              ;; Insert wrapping divs
+              (goto-char list-end)
+              (insert "</div>\n\n")
+              (goto-char list-start)
+              (insert "<div style=\"page-break-inside: avoid; break-inside: avoid;\">\n\n")
+              ;; Move past inserted content
+              (goto-char (+ list-end 60 9)))))))
+    temp-file))
+
 ;;;###autoload
 (defun markdown-pdf-export ()
   "Export the current markdown buffer to PDF."
@@ -94,7 +139,7 @@ Common options:
   (unless (markdown-pdf--pandoc-available-p)
     (error "Pandoc is not available"))
   (let ((input-file (buffer-file-name))
-        output-file css-file temp-css-p temp-html result)
+        output-file css-file temp-css-p temp-html temp-md result)
     (unless input-file
       (error "Buffer is not visiting a file"))
     (setq output-file (markdown-pdf--get-output-path input-file))
@@ -103,6 +148,8 @@ Common options:
     (when (buffer-modified-p)
       (when (y-or-n-p "Save buffer? ")
         (save-buffer)))
+    ;; Preprocess markdown to fix orphans
+    (setq temp-md (markdown-pdf--preprocess-for-export input-file))
     (message "Exporting markdown to PDF...")
     (let ((output-dir (file-name-directory output-file)))
       (unless (file-directory-p output-dir)
@@ -115,16 +162,17 @@ Common options:
     (let* ((pdf-engines '("weasyprint" "pdflatex" "xelatex"))
            (available-engine (markdown-pdf--find-available-engine pdf-engines))
            (pandoc-args (append
-                        (list "-f" markdown-pdf-markdown-format input-file "-o" output-file "--css" css-file "--embed-resources" "--standalone")
+                        (list "-f" markdown-pdf-markdown-format temp-md "-o" output-file "--css" css-file "--embed-resources" "--standalone")
                         (when available-engine (list "--pdf-engine" available-engine))
-                        (list "--metadata" "margin-top=0.5in"
-                              "--metadata" "margin-bottom=0.1in"
-                              "--metadata" "margin-left=0.1in"
-                              "--metadata" "margin-right=0.1in"
+                        (list "--metadata" "margin-top=0.4in"
+                              "--metadata" "margin-bottom=0.3in"
+                              "--metadata" "margin-left=0.3in"
+                              "--metadata" "margin-right=0.3in"
                               "--include-before-body" temp-html))))
       (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" t pandoc-args)))
     (when temp-css-p (delete-file css-file))
     (when temp-html (delete-file temp-html))
+    (when temp-md (delete-file temp-md))
     (if (= result 0)
         (progn
           (message "PDF exported successfully: %s" output-file)
@@ -148,7 +196,7 @@ Common options:
 (defun markdown-pdf-setup-keybinding ()
   "Set up the keybinding for markdown PDF export."
   (when (featurep 'markdown-mode)
-    (define-key markdown-mode-map (kbd "C-c ,") 'markdown-pdf-export-and-open)))
+    (define-key markdown-mode-map (kbd "C-c RET") 'markdown-pdf-export-and-open)))
 
 (eval-after-load 'markdown-mode
   '(markdown-pdf-setup-keybinding))

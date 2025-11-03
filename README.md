@@ -31,7 +31,7 @@ If you find this project helpful, consider supporting it!
 
 ## Usage
 
-`C-c ,` - Export and open PDF (in markdown-mode)
+`C-c RET` - Export and open PDF (in markdown-mode)
 
 Or use `M-x markdown-pdf-export-and-open`
 

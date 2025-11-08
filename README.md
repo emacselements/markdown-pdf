@@ -8,6 +8,15 @@ If you find this project helpful, consider supporting it!
 
 [Donate via PayPal](https://www.paypal.com/paypalme/revrari)
 
+## Features
+
+- Clean, professional PDF output with optimized page layout
+- Automatic page break handling to prevent content orphans
+- Header with filename and date on each page
+- Smart typography support via Pandoc
+- Customizable CSS styling
+- Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
+
 ## Requirements
 
 - Emacs 25.1+
@@ -46,6 +55,10 @@ Or use `M-x markdown-pdf-export-and-open`
 
 ;; Auto-open after export
 (setq markdown-pdf-open-after-export t)
+
+;; Markdown format (default: "markdown+smart")
+;; Options: "gfm", "markdown_strict", etc.
+(setq markdown-pdf-markdown-format "markdown+smart")
 ```
 
 ## License

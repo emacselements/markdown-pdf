@@ -11,8 +11,8 @@ If you find this project helpful, consider supporting it!
 ## Features
 
 - Clean, professional PDF output with optimized page layout
-- Automatic page break handling to prevent content orphans
-- Header with filename and date on each page
+- Natural page break handling for improved readability
+- Optional filename and date footer
 - Smart typography support via Pandoc
 - Customizable CSS styling
 - Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
@@ -55,6 +55,9 @@ Or use `M-x markdown-pdf-export-and-open`
 
 ;; Auto-open after export
 (setq markdown-pdf-open-after-export t)
+
+;; Include filename and date footer (default: t)
+(setq markdown-pdf-include-footer t)
 
 ;; Markdown format (default: "markdown+smart")
 ;; Options: "gfm", "markdown_strict", etc.

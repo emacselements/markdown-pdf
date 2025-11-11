@@ -118,7 +118,7 @@ Returns path to preprocessed temporary file."
         (make-directory output-dir t)))
     (setq temp-html (make-temp-file "markdown-pdf" nil ".html"))
     (with-temp-file temp-html
-      (insert (format "<div style='font-size:12px;padding:8px 0;border-bottom:1px solid rgb(180,180,180);margin-bottom:12px;font-weight:500;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;break-after:avoid'><span style='float:left'>%s</span><span style='float:right'>%s</span><div style='clear:both'></div></div>"
+      (insert (format "<div style='font-size:12px;padding:8px 0;border-top:1px solid rgb(180,180,180);margin-top:12px;font-weight:500;page-break-inside:avoid;break-inside:avoid'><span style='float:left'>%s</span><span style='float:right'>%s</span><div style='clear:both'></div></div>"
                       (file-name-nondirectory input-file)
                       (format-time-string "%Y-%m-%d"))))
     (let* ((pdf-engines '("weasyprint" "pdflatex" "xelatex"))
@@ -130,7 +130,7 @@ Returns path to preprocessed temporary file."
                               "--metadata" "margin-bottom=0.3in"
                               "--metadata" "margin-left=0.3in"
                               "--metadata" "margin-right=0.3in"
-                              "--include-before-body" temp-html))))
+                              "--include-after-body" temp-html))))
       (setq result (apply 'call-process markdown-pdf-pandoc-command nil "*pandoc-output*" t pandoc-args)))
     (when temp-css-p (delete-file css-file))
     (when temp-html (delete-file temp-html))

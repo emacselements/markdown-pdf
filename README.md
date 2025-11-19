@@ -1,6 +1,6 @@
-# markdown-pdf / markdown-odt
+# markdown-pdf / markdown-odt / markdown-docx
 
-Export markdown files to beautifully formatted PDFs or ODT documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
+Export markdown files to beautifully formatted PDFs, ODT, or DOCX documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
 
 ## Support
 
@@ -10,12 +10,12 @@ If you find this project helpful, consider supporting it!
 
 ## Features
 
-- Export to PDF or ODT format with a single keybinding
+- Export to PDF, ODT, or DOCX format with a single keybinding
 - Clean, professional output with optimized page layout
 - Natural page break handling for improved readability
 - Optional filename and date footer
 - Smart typography support via Pandoc
-- Customizable styling (CSS for PDF, reference docs for ODT)
+- Customizable styling (CSS for PDF, reference docs for ODT/DOCX)
 - Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
 
 ## Requirements
@@ -41,11 +41,12 @@ If you find this project helpful, consider supporting it!
 
 ## Usage
 
-`C-c RET` - Choose export format: press `p` for PDF or `o` for ODT
+`C-c RET` - Choose export format: press `p` for PDF, `o` for ODT, or `d` for DOCX
 
 Or use the individual commands:
 `M-x markdown-pdf-export-and-open`
 `M-x markdown-odt-export-and-open`
+`M-x markdown-docx-export-and-open`
 
 ## Configuration
 
@@ -86,6 +87,25 @@ Or use the individual commands:
 
 ;; Markdown format (same options as PDF)
 (setq markdown-odt-markdown-format "markdown+smart")
+```
+
+### DOCX Export
+
+```elisp
+;; Reference DOCX document for styling
+(setq markdown-docx-reference-doc "/path/to/reference.docx")
+
+;; Output directory (nil = same as source file)
+(setq markdown-docx-output-directory "~/Documents/DOCX/")
+
+;; Auto-open after export
+(setq markdown-docx-open-after-export t)
+
+;; Include filename and date footer (default: t)
+(setq markdown-docx-include-footer t)
+
+;; Markdown format (same options as PDF)
+(setq markdown-docx-markdown-format "markdown+smart")
 ```
 
 ## License

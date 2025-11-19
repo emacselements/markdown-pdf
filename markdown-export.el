@@ -7,27 +7,29 @@
 
 ;;; Commentary:
 ;; This package provides a unified interface for exporting markdown
-;; to either PDF or ODT format using C-c RET.
-;; Automatically loads both markdown-pdf and markdown-odt.
+;; to PDF, ODT, or DOCX format using C-c RET.
+;; Automatically loads markdown-pdf, markdown-odt, and markdown-docx.
 
 ;;; Code:
 
 (require 'markdown-mode nil t)
 (require 'markdown-pdf)
 (require 'markdown-odt)
+(require 'markdown-docx)
 
 (defcustom markdown-export-default-format 'pdf
   "Default export format for markdown files."
   :type '(choice (const :tag "PDF" pdf)
-                 (const :tag "ODT" odt))
+                 (const :tag "ODT" odt)
+                 (const :tag "DOCX" docx))
   :group 'markdown)
 
 ;;;###autoload
 (defun markdown-export-choose-format ()
-  "Export markdown to PDF or ODT based on user choice.
-Press 'p' for PDF or 'o' for ODT."
+  "Export markdown to PDF, ODT, or DOCX based on user choice.
+Press 'p' for PDF, 'o' for ODT, or 'd' for DOCX."
   (interactive)
-  (let ((choice (read-char-choice "Export format: (p)df or (o)dt? " '(?p ?o))))
+  (let ((choice (read-char-choice "Export format: (p)df, (o)dt, or (d)ocx? " '(?p ?o ?d))))
     (cond
      ((eq choice ?p)
       (if (fboundp 'markdown-pdf-export-and-open)
@@ -37,6 +39,10 @@ Press 'p' for PDF or 'o' for ODT."
       (if (fboundp 'markdown-odt-export-and-open)
           (markdown-odt-export-and-open)
         (error "markdown-odt not loaded")))
+     ((eq choice ?d)
+      (if (fboundp 'markdown-docx-export-and-open)
+          (markdown-docx-export-and-open)
+        (error "markdown-docx not loaded")))
      (t (error "Invalid format selected")))))
 
 ;;;###autoload

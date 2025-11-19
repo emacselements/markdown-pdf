@@ -1,6 +1,6 @@
-# markdown-pdf.el
+# markdown-pdf / markdown-odt
 
-Export markdown files to beautifully formatted PDFs from Emacs. Inspired by the VSCode "Markdown PDF" extension.
+Export markdown files to beautifully formatted PDFs or ODT documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
 
 ## Support
 
@@ -10,11 +10,12 @@ If you find this project helpful, consider supporting it!
 
 ## Features
 
-- Clean, professional PDF output with optimized page layout
+- Export to PDF or ODT format with a single keybinding
+- Clean, professional output with optimized page layout
 - Natural page break handling for improved readability
 - Optional filename and date footer
 - Smart typography support via Pandoc
-- Customizable CSS styling
+- Customizable styling (CSS for PDF, reference docs for ODT)
 - Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
 
 ## Requirements
@@ -28,23 +29,27 @@ If you find this project helpful, consider supporting it!
 ### Manual
 
 ```elisp
-(require 'markdown-pdf)
+(require 'markdown-export)  ; This loads everything
 ```
 
 ### use-package
 
 ```elisp
-(use-package markdown-pdf
+(use-package markdown-export
   :load-path "/path/to/markdown-pdf")
 ```
 
 ## Usage
 
-`C-c RET` - Export and open PDF (in markdown-mode)
+`C-c RET` - Choose export format: press `p` for PDF or `o` for ODT
 
-Or use `M-x markdown-pdf-export-and-open`
+Or use the individual commands:
+`M-x markdown-pdf-export-and-open`
+`M-x markdown-odt-export-and-open`
 
 ## Configuration
+
+### PDF Export
 
 ```elisp
 ;; Custom CSS file
@@ -62,6 +67,25 @@ Or use `M-x markdown-pdf-export-and-open`
 ;; Markdown format (default: "markdown+smart")
 ;; Options: "gfm", "markdown_strict", etc.
 (setq markdown-pdf-markdown-format "markdown+smart")
+```
+
+### ODT Export
+
+```elisp
+;; Reference ODT document for styling
+(setq markdown-odt-reference-doc "/path/to/reference.odt")
+
+;; Output directory (nil = same as source file)
+(setq markdown-odt-output-directory "~/Documents/ODTs/")
+
+;; Auto-open after export
+(setq markdown-odt-open-after-export t)
+
+;; Include filename and date footer (default: t)
+(setq markdown-odt-include-footer t)
+
+;; Markdown format (same options as PDF)
+(setq markdown-odt-markdown-format "markdown+smart")
 ```
 
 ## License

@@ -160,17 +160,8 @@ Returns path to preprocessed temporary file."
   (let ((markdown-pdf-open-after-export t))
     (markdown-pdf-export)))
 
-;;;###autoload
-(defun markdown-pdf-setup-keybinding ()
-  "Set up the keybinding for markdown PDF export."
-  (when (featurep 'markdown-mode)
-    (define-key markdown-mode-map (kbd "C-c RET") 'markdown-pdf-export-and-open)))
-
-(eval-after-load 'markdown-mode
-  '(markdown-pdf-setup-keybinding))
-
-(when (featurep 'markdown-mode)
-  (markdown-pdf-setup-keybinding))
+;; Keybinding is now handled by markdown-export.el for unified interface
+;; Users can still call markdown-pdf-export or markdown-pdf-export-and-open directly
 
 (provide 'markdown-pdf)
 

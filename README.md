@@ -1,6 +1,6 @@
-# markdown-pdf / markdown-odt / markdown-docx
+# markdown-pdf / markdown-odt / markdown-docx / markdown-html
 
-Export markdown files to beautifully formatted PDFs, ODT, or DOCX documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
+Export markdown files to beautifully formatted PDFs, ODT, DOCX, or HTML documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
 
 ## Support
 
@@ -10,12 +10,12 @@ If you find this project helpful, consider supporting it!
 
 ## Features
 
-- Export to PDF, ODT, or DOCX format with a single keybinding
+- Export to PDF, ODT, DOCX, or HTML format with a single keybinding
 - Clean, professional output with optimized page layout
 - Natural page break handling for improved readability
 - Optional filename and date footer
 - Smart typography support via Pandoc
-- Customizable styling (CSS for PDF, reference docs for ODT/DOCX)
+- Customizable styling (CSS for PDF/HTML, reference docs for ODT/DOCX)
 - Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
 
 ## Requirements
@@ -41,12 +41,13 @@ If you find this project helpful, consider supporting it!
 
 ## Usage
 
-`C-c RET` - Choose export format: press `p` for PDF, `o` for ODT, or `d` for DOCX
+`C-c RET` - Choose export format: press `p` for PDF, `o` for ODT, `d` for DOCX, or `h` for HTML
 
 Or use the individual commands:
 `M-x markdown-pdf-export-and-open`
 `M-x markdown-odt-export-and-open`
 `M-x markdown-docx-export-and-open`
+`M-x markdown-html-export-and-open`
 
 ## Configuration
 
@@ -106,6 +107,25 @@ Or use the individual commands:
 
 ;; Markdown format (same options as PDF)
 (setq markdown-docx-markdown-format "markdown+smart")
+```
+
+### HTML Export
+
+```elisp
+;; Custom CSS file
+(setq markdown-html-css-file "/path/to/custom.css")
+
+;; Output directory (nil = same as source file)
+(setq markdown-html-output-directory "~/Documents/HTML/")
+
+;; Auto-open after export
+(setq markdown-html-open-after-export t)
+
+;; Include filename and date footer (default: t)
+(setq markdown-html-include-footer t)
+
+;; Markdown format (same options as PDF)
+(setq markdown-html-markdown-format "markdown+smart")
 ```
 
 ## License

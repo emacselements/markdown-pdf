@@ -7,8 +7,8 @@
 
 ;;; Commentary:
 ;; This package provides a unified interface for exporting markdown
-;; to PDF, ODT, or DOCX format using C-c RET.
-;; Automatically loads markdown-pdf, markdown-odt, and markdown-docx.
+;; to PDF, ODT, DOCX, or HTML format using C-c RET.
+;; Automatically loads markdown-pdf, markdown-odt, markdown-docx, and markdown-html.
 
 ;;; Code:
 
@@ -24,20 +24,22 @@
 (require 'markdown-pdf)
 (require 'markdown-odt)
 (require 'markdown-docx)
+(require 'markdown-html)
 
 (defcustom markdown-export-default-format 'pdf
   "Default export format for markdown files."
   :type '(choice (const :tag "PDF" pdf)
                  (const :tag "ODT" odt)
-                 (const :tag "DOCX" docx))
+                 (const :tag "DOCX" docx)
+                 (const :tag "HTML" html))
   :group 'markdown)
 
 ;;;###autoload
 (defun markdown-export-choose-format ()
-  "Export markdown to PDF, ODT, or DOCX based on user choice.
-Press 'p' for PDF, 'o' for ODT, or 'd' for DOCX."
+  "Export markdown to PDF, ODT, DOCX, or HTML based on user choice.
+Press 'p' for PDF, 'o' for ODT, 'd' for DOCX, or 'h' for HTML."
   (interactive)
-  (let ((choice (read-char-choice "Export format: (p)df, (o)dt, or (d)ocx? " '(?p ?o ?d))))
+  (let ((choice (read-char-choice "Export format: (p)df, (o)dt, (d)ocx, or (h)tml? " '(?p ?o ?d ?h))))
     (cond
      ((eq choice ?p)
       (if (fboundp 'markdown-pdf-export-and-open)
@@ -51,6 +53,10 @@ Press 'p' for PDF, 'o' for ODT, or 'd' for DOCX."
       (if (fboundp 'markdown-docx-export-and-open)
           (markdown-docx-export-and-open)
         (error "markdown-docx not loaded")))
+     ((eq choice ?h)
+      (if (fboundp 'markdown-html-export-and-open)
+          (markdown-html-export-and-open)
+        (error "markdown-html not loaded")))
      (t (error "Invalid format selected")))))
 
 ;;;###autoload

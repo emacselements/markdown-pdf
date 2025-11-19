@@ -15,8 +15,10 @@
 (require 'markdown-mode nil t)
 
 ;; Add the directory of this file to load-path if needed
-(let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-  (unless (member dir load-path)
+(eval-and-compile
+  (let ((dir (file-name-directory (or load-file-name
+                                      (buffer-file-name)
+                                      default-directory))))
     (add-to-list 'load-path dir)))
 
 (require 'markdown-pdf)

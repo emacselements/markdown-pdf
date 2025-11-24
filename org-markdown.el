@@ -76,7 +76,7 @@ Common options:
     (let ((output-dir (file-name-directory output-file)))
       (unless (file-directory-p output-dir)
         (make-directory output-dir t)))
-    (let* ((pandoc-args (list "-f" "org" input-file "-o" output-file "-t" org-markdown-format)))
+    (let* ((pandoc-args (list "-f" "org" input-file "-o" output-file "-t" org-markdown-format "--standalone")))
       (setq result (apply 'call-process org-markdown-pandoc-command nil "*pandoc-output*" t pandoc-args)))
     (if (= result 0)
         (progn

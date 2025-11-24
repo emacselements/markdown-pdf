@@ -1,6 +1,6 @@
-# markdown-pdf / markdown-odt / markdown-docx / markdown-html
+# markdown-pdf / markdown-odt / markdown-docx / markdown-html / markdown-org
 
-Export markdown files to beautifully formatted PDFs, ODT, DOCX, or HTML documents from Emacs. Inspired by the VSCode "Markdown PDF" extension.
+Export markdown files to beautifully formatted PDFs, ODT, DOCX, HTML, or Org-mode documents from Emacs. Also convert Org-mode to Markdown. Inspired by the VSCode "Markdown PDF" extension.
 
 ## Support
 
@@ -10,10 +10,11 @@ If you find this project helpful, consider supporting it!
 
 ## Features
 
-- Export to PDF, ODT, DOCX, or HTML format with a single keybinding
+- Export to PDF, ODT, DOCX, HTML, or Org format with a single keybinding
+- Convert between Markdown and Org-mode formats
 - Clean, professional output with optimized page layout
 - Natural page break handling for improved readability
-- Optional filename and date footer
+- Optional filename and date footer (for PDF/HTML exports)
 - Smart typography support via Pandoc
 - Customizable styling (CSS for PDF/HTML, reference docs for ODT/DOCX)
 - Multiple PDF engine support (WeasyPrint, pdflatex, xelatex)
@@ -41,13 +42,23 @@ If you find this project helpful, consider supporting it!
 
 ## Usage
 
-`C-c RET` - Choose export format: press `p` for PDF, `o` for ODT, `d` for DOCX, or `h` for HTML
+### From Markdown files
+
+`C-c RET` - Choose export format: press `p` for PDF, `o` for ODT, `d` for DOCX, `h` for HTML, or `g` for Org
 
 Or use the individual commands:
-`M-x markdown-pdf-export-and-open`
-`M-x markdown-odt-export-and-open`
-`M-x markdown-docx-export-and-open`
-`M-x markdown-html-export-and-open`
+- `M-x markdown-pdf-export-and-open`
+- `M-x markdown-odt-export-and-open`
+- `M-x markdown-docx-export-and-open`
+- `M-x markdown-html-export-and-open`
+- `M-x markdown-org-export-and-open`
+
+### From Org files
+
+`C-c RET` - Export to Markdown
+
+Or use the command:
+- `M-x org-markdown-export-and-open`
 
 ## Configuration
 
@@ -126,6 +137,33 @@ Or use the individual commands:
 
 ;; Markdown format (same options as PDF)
 (setq markdown-html-markdown-format "markdown+smart")
+```
+
+### Org Export (Markdown to Org)
+
+```elisp
+;; Output directory (nil = same as source file)
+(setq markdown-org-output-directory "~/Documents/Org/")
+
+;; Auto-open after export
+(setq markdown-org-open-after-export t)
+
+;; Markdown format (same options as PDF)
+(setq markdown-org-markdown-format "markdown+smart")
+```
+
+### Markdown Export (Org to Markdown)
+
+```elisp
+;; Output directory (nil = same as source file)
+(setq org-markdown-output-directory "~/Documents/Markdown/")
+
+;; Auto-open after export
+(setq org-markdown-open-after-export t)
+
+;; Markdown output format (default: "gfm")
+;; Options: "gfm" (GitHub), "markdown", "markdown_strict", etc.
+(setq org-markdown-format "gfm")
 ```
 
 ## License

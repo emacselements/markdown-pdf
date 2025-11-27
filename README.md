@@ -1,6 +1,6 @@
-# markdown-pdf / markdown-odt / markdown-docx / markdown-html / markdown-org
+# emacs-markdown-tools
 
-Export markdown files to beautifully formatted PDFs, ODT, DOCX, HTML, or Org-mode documents from Emacs. Also convert Org-mode to Markdown. Includes helpful markdown editing utilities. Inspired by the VSCode "Markdown PDF" extension.
+A comprehensive Emacs toolkit for markdown and org-mode conversion. Export markdown files to beautifully formatted PDFs, ODT, DOCX, HTML, or Org-mode documents. Convert between Markdown and Org-mode formats bidirectionally. Includes helpful markdown editing utilities. Inspired by the VSCode "Markdown PDF" extension.
 
 ## Support
 
@@ -48,11 +48,11 @@ If you find this project helpful, consider supporting it!
 
 ```elisp
 (use-package markdown-export
-  :load-path "/path/to/markdown-pdf")
+  :load-path "/path/to/emacs-markdown-tools")
 
 ;; Optional: markdown editing utilities
 (use-package markdown-tweaks
-  :load-path "/path/to/markdown-pdf"
+  :load-path "/path/to/emacs-markdown-tools"
   :after markdown-mode)
 ```
 
@@ -216,17 +216,22 @@ To customize the directories for title-based file saving, edit the `hydra-markdo
   ("q" nil))
 ```
 
-## Files in this Repository
+## Repository Structure
 
-- `markdown-export.el` - Main entry point, loads all export modules
-- `markdown-pdf.el` - PDF export functionality
-- `markdown-odt.el` - ODT export functionality
-- `markdown-docx.el` - DOCX export functionality
-- `markdown-html.el` - HTML export functionality
-- `markdown-org.el` - Markdown to Org export
-- `org-markdown.el` - Org to Markdown export (main implementation)
-- `org-to-markdown.el` - Alternative Org to Markdown converter
-- `markdown-tweaks.el` - Editing utilities and helper functions
+```
+emacs-markdown-tools/
+├── exporters/              # Export modules
+│   ├── markdown-pdf.el     # PDF export
+│   ├── markdown-odt.el     # ODT export
+│   ├── markdown-docx.el    # DOCX export
+│   ├── markdown-html.el    # HTML export
+│   └── markdown-org.el     # Markdown to Org export
+├── converters/             # Bidirectional converters
+│   ├── org-markdown.el     # Org to Markdown (via pandoc)
+│   └── org-to-markdown.el  # Org to Markdown (simple converter)
+├── markdown-export.el      # Main entry point
+└── markdown-tweaks.el      # Editing utilities
+```
 
 ## License
 

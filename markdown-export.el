@@ -21,7 +21,9 @@
   (let ((dir (file-name-directory (or load-file-name
                                       (buffer-file-name)
                                       default-directory))))
-    (add-to-list 'load-path dir)))
+    (add-to-list 'load-path dir)
+    (add-to-list 'load-path (expand-file-name "exporters" dir))
+    (add-to-list 'load-path (expand-file-name "converters" dir))))
 
 (require 'markdown-pdf)
 (require 'markdown-odt)

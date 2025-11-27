@@ -1,6 +1,6 @@
 # emacs-markdown-tools
 
-A comprehensive Emacs toolkit for markdown and org-mode conversion. Export markdown files to beautifully formatted PDFs, ODT, DOCX, HTML, or Org-mode documents. Convert between Markdown and Org-mode formats bidirectionally. Includes helpful markdown editing utilities. Inspired by the VSCode "Markdown PDF" extension.
+A comprehensive Emacs toolkit for markdown and org-mode. Export markdown files to beautifully formatted PDFs (inspired by the VSCode "Markdown PDF" extension), ODT, DOCX, HTML, or Org-mode documents. Convert between Markdown and Org-mode formats bidirectionally. Includes markdown editing utilities for date insertion, line break formatting, rubric formatting, and smart title-based file saving.
 
 ## Support
 

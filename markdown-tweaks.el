@@ -119,4 +119,26 @@ Author: Raoul Comninos"
     (save-excursion
       (insert "*"))))
 
+;; Easily add double spaces to end of lines
+
+(defun my-format-markdown-region ()
+  "Format selected text for markdown: add two spaces at end of each line for line breaks."
+  (interactive)
+  (if (use-region-p)
+      (let ((start (region-beginning))
+            (end (region-end)))
+        (save-excursion
+          (goto-char start)
+          (while (< (point) end)
+            (end-of-line)
+            (unless (looking-at-p "$")
+              (just-one-space)
+              (delete-char -1))
+            (insert "  ")
+            (forward-line 1)
+            (setq end (+ end 2)))))
+    (message "No region selected")))
+
+(global-set-key (kbd "C-c m") 'my-format-markdown-region)
+
 (provide 'markdown-tweaks)

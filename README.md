@@ -1,34 +1,48 @@
-# Emacs Markdown Tools
+# Markdown Tools for Emacs
 
-A set of tools to enhance markdown in Emacs consisting of:
+Markdown export and editing utilities for Emacs.
 
-a) Export functions: Export markdown files to beautifully formatted PDFs (inspired by the VSCode "Markdown PDF" extension), ODT, DOCX, HTML, or Org-mode documents. Convert between Markdown and Org-mode formats bidirectionally. 
+## Features
 
-b) Markdown editing utilities for date insertion, line break formatting, rubric formatting, and smart title-based file saving.
+**Export Functions** - Press `C-c RET` to export markdown to:
+- PDF (with pretty styling)
+- ODT, DOCX, HTML  
+- Org-mode
 
-## Support
+**Org Conversion** - Export org files to markdown using pandoc or a custom converter.
 
-If you find this project helpful, consider supporting it!
-
-[Donate via PayPal](https://www.paypal.com/paypalme/revrari)
+**Editing Utilities** - Additional markdown keybindings:
+- `C-c .` - Insert formatted date
+- `C-c C-b` - Add line breaks (double spaces)
+- `C-c C-r` - Format rubric text
+- `C-c C-s` - Save with title-based filename
 
 ## Requirements
 
 - Emacs 25.1+
 - [Pandoc](https://pandoc.org/)
-- [WeasyPrint](https://weasyprint.org/) (recommended) or pdflatex/xelatex
+- [WeasyPrint](https://weasyprint.org/) (recommended) or pdflatex/xelatex for PDF export
 
 ## Installation
 
-### Manual
-
 ```elisp
-;; Load the export functionality
+;; Load export functionality (includes all formats)
 (require 'markdown-export)
 
-;; Optional: Load markdown editing utilities
+;; Optional: Load editing utilities
 (require 'markdown-tweaks)
 ```
+
+## Usage
+
+In markdown files, press `C-c RET` and choose format:
+- `p` for PDF
+- `o` for ODT  
+- `d` for DOCX
+- `h` for HTML
+- `g` for Org
+
+In org files, `C-c RET` exports to markdown.
 
 ## License
 
